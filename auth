@@ -1,0 +1,205 @@
+12-06-2025
+
+
+
+# 🛡️ Web Application Authentication – In-depth Notes
+
+---
+
+## 🔐 **Authentication Systems in Web Applications**
+
+Modern web apps use a combination of these authentication methods:
+
+* **Session-based Authentication**
+  Traditional approach where server stores session IDs in memory or DB. Clients send the session ID via cookies.
+
+* **JWT (JSON Web Token)**
+  Stateless, signed tokens that include user data. Sent via headers. Ideal for APIs and distributed systems.
+
+* **OAuth 2.0 / OpenID Connect**
+  Third-party login (e.g., Google, GitHub). Used in apps needing delegated access or federated identity.
+
+* **2FA / MFA (Two-Factor Auth)**
+  Requires additional verification: OTP, biometric, or device prompt after password.
+
+* **OTP / Magic Link / Biometric**
+  Alternate flows for passwordless login. Involve device verification or one-time credentials.
+
+---
+
+## 🧩 **Authentication Challenges and 2FA**
+
+* Before completing 2FA, apps create a **challenge** – a temporary token or session that awaits second-factor verification.
+* It ensures the system knows which session/user the OTP or biometric is for.
+* Challenges often include time-to-live (TTL) and device/browser metadata for added security.
+
+---
+
+## 🧠 **JWT Authentication – How It Works**
+
+* User logs in → server returns a **JWT access token** (short-lived).
+* Optionally, a **refresh token** (long-lived) is also issued to get new access tokens without re-login.
+* JWTs include payload (e.g., user ID, roles), signed with a secret (HMAC) or private key (RSA/ECDSA).
+
+### 🔁 Refresh Tokens
+
+* Sent via **HTTP-only secure cookies**
+* Used when access token expires
+* Refresh token endpoint verifies it, rotates it, and returns a new access token
+
+---
+
+## 🔒 **Securing JWT in Frontend Applications**
+
+### ❌ Problems with `localStorage`:
+
+* Easily accessible by JavaScript
+* Vulnerable to **XSS attacks** → attacker can steal tokens
+
+### ✅ Safer Practice:
+
+* Store **refresh token in HTTP-only Secure cookies**
+* Store **access token in memory** (not persisted)
+* Rotate tokens periodically
+* Bind tokens to **device fingerprint** or session ID
+
+---
+
+## 🧬 **Device Fingerprinting (For Session Hardening)**
+
+Useful to bind tokens to a device/browser identity:
+
+* Browser & OS details (`navigator.userAgent`, `platform`)
+* Screen resolution, time zone
+* Installed fonts or plugins (limited)
+* Canvas/WebGL/audio fingerprint
+* IP address, MAC (not always reliable)
+* Helps detect token misuse from unauthorized devices
+
+---
+
+## 🍪 **Cookies: Security and Behavior**
+
+* `HttpOnly`: JS can't access it → protects against XSS
+* `Secure`: Sent only over HTTPS
+* `SameSite`: Controls cross-site sending (`Lax`, `Strict`, `None`)
+* When an API responds with `Set-Cookie`, browsers **auto-store** it and **auto-send** it for matching requests.
+
+---
+
+## 🚫 **Restricting API Access to Your Web App Only**
+
+To prevent unauthorized API access (via Postman, scripts):
+
+1. **CORS (Cross-Origin Resource Sharing)**
+   Restrict which origins can access APIs
+
+2. **Custom Headers**
+   Require specific headers (e.g., `X-App-Client`) and validate them
+
+3. **CSRF Tokens**
+   Protects against session misuse from other origins
+
+4. **Rate Limiting / IP Throttling**
+   Prevent abuse by bots or brute-force scripts
+
+5. **Do Not Trust User-Agent or Origin Alone**
+
+---
+
+## ⚠️ **Frontend `.env` Files – Are They Safe?**
+
+* `.env` values used in frontend apps (React, Vue) are **injected at build time** → exposed in JS bundles
+* NEVER put secrets (DB passwords, private keys) here
+* OK to use for:
+
+  * Public API endpoints
+  * Environment flags (e.g., `REACT_APP_ENV=prod`)
+
+---
+
+## 🧪 **Cookies Disabled? What Happens to Refresh Token?**
+
+* If the user blocks cookies:
+
+  * **Refresh token won’t be stored or sent**
+  * Auth flow breaks → fallback to re-login or alternative storage (less secure)
+* You can detect it via `navigator.cookieEnabled` in JavaScript
+
+---
+
+## 🏢 **How Large Companies Handle Authentication**
+
+* Use layered, scalable architecture:
+
+  * **JWT for access control**
+  * **Refresh tokens + fingerprinting**
+  * **SSO, OAuth, custom identity providers**
+* Monitor device behavior, locations, risk patterns
+* Use **risk-based auth**, **adaptive MFA**, **session management**
+* Example: Google uses device/IP risk scoring for 2FA bypass
+
+---
+
+## 🧱 **What Is a Modular Monolith?**
+
+* A single application (monolith) structured as **independent modules**
+* Each module has **clear domain boundaries**, encapsulated logic
+* Easier testing, refactoring, and scaling **without microservices complexity**
+* Companies like **Shopify** use it at scale to avoid early microservice fragmentation
+
+---
+
+## 🚀 **Redis vs Memcached – Which to Choose?**
+
+| Feature                  | Redis                               | Memcached                         |
+| ------------------------ | ----------------------------------- | --------------------------------- |
+| Data Types               | Rich: Strings, Lists, Sets, Hashes  | Only Strings                      |
+| Persistence              | ✅ AOF & RDB                         | ❌ None                            |
+| Pub/Sub, Streams         | ✅ Yes                               | ❌ No                              |
+| Replication & Clustering | ✅ Supported                         | ❌ Not built-in                    |
+| Max Value Size           | Up to 512 MB                        | \~1 MB                            |
+| Use Case Fit             | Sessions, rate limits, leaderboards | Simple key-value cache            |
+| Speed (raw)              | Slightly lower due to overhead      | Very fast for small objects       |
+| Security Features        | AUTH, TLS, ACLs                     | None (relies on network firewall) |
+
+✅ Redis = Feature-rich, ideal for structured caching
+✅ Memcached = Lightweight, ideal for high-throughput, ephemeral cache
+
+---
+
+## 📡 **Redis / Memcached Endpoints in Your Org**
+
+* If you're using **Redis or Memcached via endpoints**, that means:
+
+  * Data is stored in **a separate cache server's RAM** (like Redis EC2 or AWS ElastiCache)
+  * Your Node.js app connects over the network (TCP) to these endpoints
+* This avoids using app server RAM and supports **horizontal scaling**
+
+---
+
+## 🧹 **What is an Eviction Policy?**
+
+When memory is full, caching systems must choose what to discard:
+
+| Policy        | Description                                 |
+| ------------- | ------------------------------------------- |
+| **LRU**       | Least Recently Used – oldest inactive item  |
+| **LFU**       | Least Frequently Used – least accessed item |
+| **FIFO**      | First In First Out                          |
+| **Random**    | Random item eviction                        |
+| **TTL-based** | Item expires after time regardless of usage |
+
+* Redis and Memcached support LRU by default
+* Ensures cache stays fresh and optimized
+
+---
+
+Let me know if you want this exported as:
+
+* ✅ Markdown (`.md`)
+* ✅ PDF
+* ✅ Notion-compatible document
+* ✅ GitHub wiki format
+
+Or, if you want **a visual mind map** for quick recall.
