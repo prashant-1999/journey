@@ -1,131 +1,68 @@
-# 🧠 Low-Level Design (LLD) Roadmap - JavaScript Friendly
+# 🧩 Low-Level Design (LLD) Roadmap – JavaScript Focused
 
-This roadmap helps me learn **Low-Level Design (LLD)** using **JavaScript**, focusing on real-world systems, object-oriented programming, and design principles.
-
----
-
-## ✅ Step 1: Deepen Object-Oriented Programming (OOP) in JavaScript
-
-### 📌 Topics to Master:
-- Classes & Objects
-- Encapsulation
-- Inheritance vs Composition
-- Polymorphism
-- Abstraction (simulate interfaces)
-- Static methods & properties
-- Access modifiers (`#private`, `public`)
-
-### 📚 Resources:
-- [MDN - OOP in JS](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object-oriented_JS)
-- [You Don’t Know JS - Objects](https://github.com/getify/You-Dont-Know-JS)
+A concise path to learn LLD using JS, focusing on OOP, design principles, and system design problems.
 
 ---
 
-## ✅ Step 2: Learn SOLID Principles
+## ✅ Step 1: Master OOP in JavaScript
 
-| Principle | Description |
-|----------|-------------|
-| S - Single Responsibility | One class → One job |
-| O - Open/Closed | Extend, don’t modify |
-| L - Liskov Substitution | Subclasses should replace base class without breaking logic |
-| I - Interface Segregation | Don't force methods that aren't used |
-| D - Dependency Inversion | Depend on abstractions, not concrete classes |
+- Classes, objects, inheritance, composition
+- Encapsulation, polymorphism, abstraction
+- Private/public fields, static methods
 
-### 📚 Resources:
-- [Solid Principles Simplified](https://medium.com/swlh/solid-principles-made-easy-67b1246bcdf)
+**Resources:**
+- [MDN OOP in JS](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object-oriented_JS)
+- You Don’t Know JS – Objects & Classes
 
 ---
 
-## ✅ Step 3: Design Patterns (Key Ones First)
+## ✅ Step 2: Understand SOLID Principles
 
-### 🎯 Creational Patterns:
-- [ ] Singleton
-- [ ] Factory
+- **S**: One class = one responsibility  
+- **O**: Extendable, not modifiable  
+- **L**: Subtypes should not break the base type  
+- **I**: Keep interfaces lean  
+- **D**: Depend on abstractions  
 
-### 🎯 Structural Patterns:
-- [ ] Adapter
-- [ ] Decorator
-
-### 🎯 Behavioral Patterns:
-- [ ] Strategy
-- [ ] Observer
-
-### 📚 Resources:
-- [Refactoring Guru - Patterns](https://refactoring.guru/design-patterns)
-- [JavaScript Design Patterns in JS](https://www.patterns.dev/posts/classic-design-patterns/)
+**Quick Read**: [SOLID Made Easy](https://medium.com/swlh/solid-principles-made-easy-67b1246bcdf)
 
 ---
 
-## ✅ Step 4: UML & Class Diagrams
+## ✅ Step 3: Learn Key Design Patterns
 
-### ✏️ Learn to Sketch:
-- Class diagrams: attributes, methods, relationships
-- Relationships:
-  - Inheritance (🡒)
-  - Composition vs Aggregation
-- Sequence diagrams (optional)
+- **Creational**: Singleton, Factory  
+- **Structural**: Adapter, Decorator  
+- **Behavioral**: Strategy, Observer  
 
-### 🛠️ Tools:
-- [Draw.io](https://draw.io)
-- [Lucidchart](https://lucidchart.com)
+**Resource**: [Refactoring Guru](https://refactoring.guru/design-patterns)
 
 ---
 
-## ✅ Step 5: Solve LLD Problem Statements
+## ✅ Step 4: UML Basics
 
-Start with beginner-friendly real-world systems. For each:
-- [ ] Draw class diagram (UML)
-- [ ] Write code in JS using OOP
-- [ ] Add README with problem description and approach
-
-### 🧩 Suggested Systems:
-- [ ] Tic-Tac-Toe Game
-- [ ] Parking Lot System
-- [ ] Library Management System
-- [ ] Snake & Ladder
-- [ ] Vending Machine
-- [ ] ATM Machine
-- [ ] Cab Booking System (Uber-like)
-
-### 📚 Resources:
-- [CodeKarle - LLD Series (YouTube)](https://www.youtube.com/@CodeKarle)
-- [Gaurav Sen - LLD Playlist](https://www.youtube.com/@gkcs)
+- Class diagrams: attributes, methods, relationships  
+- Inheritance vs Composition  
+- Use [draw.io](https://draw.io) to practice
 
 ---
 
-## ✅ Extra (Optional)
-> For future steps when you’re ready:
+## ✅ Step 5: Solve LLD Problems (in JS)
 
-- [ ] Learn Clean Code principles
-- [ ] TypeScript or Java for stricter OOP
-- [ ] Unit testing with Jest
-- [ ] Mocking and testable design
-- [ ] Build LLD projects & upload to GitHub
+Build and document these systems:
+
+- [ ] Parking Lot  
+- [ ] Library System  
+- [ ] Vending Machine  
+- [ ] Snake & Ladder  
+- [ ] ATM Machine  
+- [ ] Tic-Tac-Toe  
+
+For each:
+- Design class diagram
+- Write JS implementation using OOP
+- Add brief README
 
 ---
 
 ## 📁 Suggested Folder Structure
 
-```bash
-LLD-Roadmap-JS/
-│
-├── 01-OOP-Concepts/
-│   └── shape-class.js
-│
-├── 02-SOLID-Principles/
-│   └── open-closed-example.js
-│
-├── 03-Design-Patterns/
-│   └── singleton/
-│       └── logger.js
-│
-├── 04-UML-Diagrams/
-│   └── parking-lot-class-diagram.png
-│
-├── 05-LLD-Problems/
-│   └── parking-lot/
-│       ├── classes.js
-│       ├── diagram.png
-│       └── README.md
-│
-└── README.md  <-- this file
